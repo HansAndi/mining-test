@@ -26,7 +26,7 @@ class StoreVehicleRequest extends FormRequest
             'type' => ['required', 'string', 'in:Person,Cargo'],
             'ownership' => ['required', 'string', 'in:Company,Rental'],
             'status_id' => ['required', 'integer', 'exists:vehicle_statuses,id'],
-            'last_used_at' => ['nullable', 'date'],
+            // 'last_used_at' => ['nullable', 'date'],
         ];
     }
 }

@@ -17,12 +17,21 @@ enum VehicleStatus: int
         };
     }
 
+    public function getValue(): int
+    {
+        return match ($this) {
+            self::Available => 1,
+            self::Unavailable => 2,
+            self::Maintenance => 3,
+        };
+    }
+
     public static function getOptions(): array
     {
         return [
-            ['value' => self::Available, 'status' => self::Available->getStatus()],
-            ['value' => self::Unavailable, 'status' => self::Unavailable->getStatus()],
-            ['value' => self::Maintenance, 'status' => self::Maintenance->getStatus()],
+            ['value' => self::Available->getValue(), 'status' => self::Available->getStatus()],
+            ['value' => self::Unavailable->getValue(), 'status' => self::Unavailable->getStatus()],
+            ['value' => self::Maintenance->getValue(), 'status' => self::Maintenance->getStatus()],
         ];
     }
 }

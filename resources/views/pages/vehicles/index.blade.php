@@ -1,38 +1,11 @@
 <x-app-layout>
     <div class="main-content">
         <section class="section">
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                Launch demo modal
-            </button>
-
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            ...
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="section-header">
                 <h1>Vehicle</h1>
-                {{-- <div class="section-header-button">
-                    <a href="{{ route('products.create') }}"
-                        class="btn btn-primary">Add New</a>
-                </div> --}}
+                <div class="section-header-button">
+                    <a href="{{ route('vehicles.create') }}" class="btn btn-primary">Add New</a>
+                </div>
                 <div class="section-header-breadcrumb">
                     <div class="breadcrumb-item active"><a href="#">Dashboard</a></div>
                     <div class="breadcrumb-item"><a href="#">Vehicles</a></div>
@@ -65,7 +38,7 @@
                                                 <th>Owner</th>
                                                 <th>Status</th>
                                                 <th>Last Used</th>
-                                                {{-- <th>Action</th> --}}
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
@@ -92,7 +65,7 @@
                     { data: 'ownership', name: 'ownership' },
                     { data: 'status', name: 'status', searchable: true },
                     { data: 'last_used_at', name: 'last_used_at' },
-                    // { data: 'action', name: 'action' }
+                    { data: 'action', name: 'action' }
                 ]
             });
         });

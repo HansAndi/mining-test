@@ -2,27 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role;
+use App\Models\Vehicle;
+use App\Enums\VehicleType;
 use App\Enums\VehicleOwner;
 use App\Enums\VehicleStatus;
-use App\Enums\VehicleType;
-use App\Models\Vehicle;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\StoreVehicleRequest;
 use App\Http\Requests\UpdateVehicleRequest;
-use Illuminate\Http\Request;
-use Yajra\DataTables\Facades\DataTables;
 
 class VehicleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function data()
-    {
-        // $vehicles = Vehicle::with('status')->latest()->get();
-        return DataTables::of(Vehicle::query())->make(true);
-
-    }
-
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -52,7 +48,26 @@ class VehicleController extends Controller
      */
     public function create()
     {
-        //
+        if (Auth::user()->role_id !== Role::Admin->value) {
+            Alert::toast('You are not allowed to create vehicle', 'error');
+            return redirect()->route('vehicles.index');
+        }
+
+        $types = collect(VehicleType::getOptions())->map(function ($item) {
+            return (object) $item;
+        });
+        // dd($types);
+
+        $owners = collect(VehicleOwner::getOptions())->map(function ($item) {
+            return (object) $item;
+        });
+
+        $statuses = collect(VehicleStatus::getOptions())->map(function ($item) {
+            return (object) $item;
+        });
+        // dd($statuses);
+
+        return view('pages.vehicles.form', compact('types', 'owners', 'statuses'));
     }
 
     /**
@@ -60,7 +75,17 @@ class VehicleController extends Controller
      */
     public function store(StoreVehicleRequest $request)
     {
-        Vehicle::create($request->validated());
+        // dd($request->validated());
+        try {
+            Vehicle::create($request->validated());
+
+            Alert::toast('Vehicle created successfully', 'success');
+            return redirect()->route('vehicles.index');
+        } catch (\Exception $e) {
+            Alert::toast('Failed to create vehicle', 'error');
+            return redirect()->back();
+        }
+
     }
 
     /**
@@ -76,7 +101,24 @@ class VehicleController extends Controller
      */
     public function edit(Vehicle $vehicle)
     {
-        //
+        if (Auth::user()->role_id !== Role::Admin->value) {
+            Alert::toast('You are not allowed to create vehicle', 'error');
+            return redirect()->route('vehicles.index');
+        }
+
+        $types = collect(VehicleType::getOptions())->map(function ($item) {
+            return (object) $item;
+        });
+
+        $owners = collect(VehicleOwner::getOptions())->map(function ($item) {
+            return (object) $item;
+        });
+
+        $statuses = collect(VehicleStatus::getOptions())->map(function ($item) {
+            return (object) $item;
+        });
+
+        return view('pages.vehicles.form', compact('vehicle', 'types', 'owners', 'statuses'));
     }
 
     /**
@@ -84,7 +126,15 @@ class VehicleController extends Controller
      */
     public function update(UpdateVehicleRequest $request, Vehicle $vehicle)
     {
-        //
+        try {
+            $vehicle->update($request->validated());
+
+            Alert::toast('Vehicle updated successfully', 'success');
+            return redirect()->route('vehicles.index');
+        } catch (\Exception $e) {
+            Alert::toast('Failed to update vehicle', 'error');
+            return redirect()->back();
+        }
     }
 
     /**
@@ -92,6 +142,14 @@ class VehicleController extends Controller
      */
     public function destroy(Vehicle $vehicle)
     {
-        //
+        try {
+            $vehicle->delete();
+
+            Alert::toast('Vehicle deleted successfully', 'success');
+            return redirect()->route('vehicles.index');
+        } catch (\Exception $e) {
+            Alert::toast('Failed to delete vehicle', 'error');
+            return redirect()->back();
+        }
     }
 }

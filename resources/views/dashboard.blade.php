@@ -1,24 +1,14 @@
 <x-app-layout>
-    {{-- <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+    @push('script')
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    @endpush
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
-                </div>
-            </div>
-        </div>
-    </div> --}}
     <div class="main-content">
         <section class="section">
             <div class="section-header">
                 <h1>Dashboard</h1>
             </div>
+
             <div class="row">
                 <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                     <div class="card card-statistic-1">
@@ -30,7 +20,7 @@
                                 <h4>User</h4>
                             </div>
                             <div class="card-body">
-                                {{-- {{ $users }} --}}
+                                {{ $user }}
                             </div>
                         </div>
                     </div>
@@ -42,10 +32,10 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Product</h4>
+                                <h4>Vehicle</h4>
                             </div>
                             <div class="card-body">
-                                {{-- {{ $products }} --}}
+                                {{ $vehicle }}
                             </div>
                         </div>
                     </div>
@@ -57,10 +47,10 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Category</h4>
+                                <h4>Location</h4>
                             </div>
                             <div class="card-body">
-                                {{-- {{ $categories }} --}}
+                                {{ $location }}
                             </div>
                         </div>
                     </div>
@@ -72,15 +62,115 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Online Users</h4>
+                                <h4>Reservation</h4>
                             </div>
                             <div class="card-body">
-                                47
+                                {{ $reservation }}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="container text-center">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h2>Total Konsumsi BBM Per Hari</h2>
+                        <canvas id="myChart1"></canvas>
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-8">
+                        <h2>Reservasi Per Hari</h2>
+                        <canvas id="myChart2"></canvas>
+                    </div>
+                </div>
+            </div>
         </section>
     </div>
+
+    <script>
+        // First Chart
+        const ctx1 = document.getElementById('myChart1');
+        const riwayatArray1 = @json($konsumsi->toArray());
+        const tanggal1 = riwayatArray1.map(data => data.start_date);
+        const fuel_usage = riwayatArray1.map(data => data.total_fuel_usage);
+
+        new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: tanggal1,
+                datasets: [{
+                    label: 'Konsumsi BBM Perhari',
+                    data: fuel_usage,
+                    borderWidth: 1,
+                    backgroundColor: '#007bff',
+                    borderColor: '#007bff',
+                    borderWidth: 2.5,
+                    pointBackgroundColor: '#ffffff',
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            stepSize: 20
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            display: true
+                        },
+                        gridLines: {
+                            display: false
+                        }
+                    }]
+                },
+            }
+        });
+
+        // second chart
+        const ctx = document.getElementById('myChart2');
+        const data1 = @json($pemakaian->toArray());
+        const tanggal2 = data1.map(data => data.start_date); // Corrected variable name
+        const total_reservation = data1.map(data => data.total_reservation);
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: tanggal2, // Corrected variable name
+                datasets: [{
+                    label: 'Total Reservasi', // Updated label
+                    data: total_reservation,
+                    borderWidth: 1,
+                    backgroundColor: '#007bff',
+                    borderColor: '#007bff',
+                    borderWidth: 2.5,
+                    pointBackgroundColor: '#ffffff',
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            stepSize: 5
+                        }
+                    }],
+                    xAxes: [{
+                        ticks: {
+                            display: true
+                        },
+                        gridLines: {
+                            display: false
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
 </x-app-layout>

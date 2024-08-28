@@ -26,8 +26,8 @@ enum VehicleType: int
     public static function getOptions(): array
     {
         return [
-            ['value' => self::Person, 'status' => self::Person->getType()],
-            ['value' => self::Cargo, 'status' => self::Cargo->getType()],
+            ['value' => self::Person, 'name' => self::Person->getType()],
+            ['value' => self::Cargo, 'name' => self::Cargo->getType()],
         ];
     }
 }

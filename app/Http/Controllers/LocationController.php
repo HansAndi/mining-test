@@ -6,7 +6,9 @@ use App\Models\Location;
 use App\Http\Requests\StoreLocationRequest;
 use App\Http\Requests\UpdateLocationRequest;
 use Illuminate\Http\Request;
+use RealRashid\SweetAlert\Facades\Alert as FacadesAlert;
 use Yajra\DataTables\Facades\DataTables;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class LocationController extends Controller
 {
@@ -31,6 +33,10 @@ class LocationController extends Controller
                 ->make(true);
         }
 
+        $title = 'Delete Location!';
+        $text = "Are you sure you want to location?";
+        confirmDelete($title, $text);
+
         return view('pages.locations.index');
     }
 
@@ -39,7 +45,7 @@ class LocationController extends Controller
      */
     public function create()
     {
-        return view('pages.locations.create');
+        return view('pages.locations.form');
     }
 
     /**
@@ -47,10 +53,16 @@ class LocationController extends Controller
      */
     public function store(StoreLocationRequest $request)
     {
-        Location::create($request->validated());
+        try {
+            Location::create($request->validated());
 
-        return redirect()->route('locations.index')
-            ->with('success', 'Location created successfully.');
+            Alert::toast('Location created successfully', 'success');
+
+            return redirect()->route('locations.index');
+        } catch (\Exception $e) {
+            Alert::toast('Failed to create location', 'error');
+            return redirect()->route('locations.index');
+        }
     }
 
     /**
@@ -74,10 +86,16 @@ class LocationController extends Controller
      */
     public function update(UpdateLocationRequest $request, Location $location)
     {
-        $location->update($request->validated());
+        try {
+            $location->update($request->validated());
 
-        return redirect()->route('locations.index')
-            ->with('success', 'Location updated successfully.');
+            Alert::toast('Location updated successfully', 'success');
+
+            return redirect()->route('locations.index');
+        } catch (\Exception $e) {
+            Alert::toast('Failed to update location', 'error');
+            return redirect()->route('locations.index');
+        }
     }
 
     /**
@@ -85,9 +103,15 @@ class LocationController extends Controller
      */
     public function destroy(Location $location)
     {
-        $location->delete();
+        try {
+            $location->delete();
 
-        return redirect()->route('locations.index')
-            ->with('success', 'Location deleted successfully.');
+            Alert::toast('Location deleted successfully', 'success');
+
+            return redirect()->route('locations.index');
+        } catch (\Exception $e) {
+            Alert::toast('Failed to delete location', 'error');
+            return redirect()->route('locations.index');
+        }
     }
 }

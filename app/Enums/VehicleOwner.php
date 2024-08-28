@@ -18,8 +18,8 @@ enum VehicleOwner: int
     public static function getOptions(): array
     {
         return [
-            ['value' => self::Company, 'status' => self::Company->getOwnership()],
-            ['value' => self::Rental, 'status' => self::Rental->getOwnership()],
+            ['value' => self::Company, 'name' => self::Company->getOwnership()],
+            ['value' => self::Rental, 'name' => self::Rental->getOwnership()],
         ];
     }
 }

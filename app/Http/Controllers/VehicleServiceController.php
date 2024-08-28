@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role;
+use Illuminate\Http\Request;
 use App\Models\VehicleService;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\StoreVehicleServiceRequest;
 use App\Http\Requests\UpdateVehicleServiceRequest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Yajra\DataTables\Facades\DataTables;
 
 class VehicleServiceController extends Controller
 {
@@ -45,6 +48,11 @@ class VehicleServiceController extends Controller
      */
     public function create()
     {
+        if (Auth::user()->role_id !== Role::Admin->value) {
+            Alert::toast('You are not allowed to create vehicle service', 'error');
+            return redirect()->route('vehicle-service.index');
+        }
+
         return view('pages.services.create', [
             'vehicles' => DB::table('vehicles')->select('id', 'name')->get(),
         ]);
@@ -55,12 +63,17 @@ class VehicleServiceController extends Controller
      */
     public function store(StoreVehicleServiceRequest $request)
     {
-        // dd($request->validated());
+        try {
+            VehicleService::create($request->validated());
 
-        VehicleService::create($request->validated());
+            Alert::toast('Vehicle service created successfully', 'success');
 
-        return redirect()->route('vehicle-service.index')
-            ->with('success', 'Vehicle service created successfully.');
+            return redirect()->route('vehicle-service.index');
+        } catch (\Exception $e) {
+            Alert::toast('Failed to create vehicle service', 'error');
+
+            return redirect()->route('vehicle-service.index');
+        }
     }
 
     /**
@@ -76,8 +89,10 @@ class VehicleServiceController extends Controller
      */
     public function edit(VehicleService $vehicleService)
     {
-        // $service = VehicleService::findorFail($vehicleService->id);
-        // dd($vehicleService);
+        if (Auth::user()->role_id !== Role::Admin->value) {
+            Alert::toast('You are not allowed to edit vehicle service', 'error');
+            return redirect()->route('vehicle-service.index');
+        }
 
         return view('pages.services.create', [
             'vehicleService' => $vehicleService,
@@ -90,10 +105,17 @@ class VehicleServiceController extends Controller
      */
     public function update(UpdateVehicleServiceRequest $request, VehicleService $vehicleService)
     {
-        $vehicleService->update($request->validated());
+       try {
+            $vehicleService->update($request->validated());
 
-        return redirect()->route('vehicle-service.index')
-            ->with('success', 'Vehicle service updated successfully.');
+            Alert::toast('Vehicle service updated successfully', 'success');
+
+            return redirect()->route('vehicle-service.index');
+        } catch (\Exception $e) {
+            Alert::toast('Failed to update vehicle service', 'error');
+
+            return redirect()->route('vehicle-service.index');
+        }
     }
 
     /**
@@ -101,9 +123,16 @@ class VehicleServiceController extends Controller
      */
     public function destroy(VehicleService $vehicleService)
     {
-        $vehicleService->delete();
+       try {
+            $vehicleService->delete();
 
-        return redirect()->route('vehicle-service.index')
-            ->with('success', 'Vehicle service deleted successfully.');
+            Alert::toast('Vehicle service deleted successfully', 'success');
+
+            return redirect()->route('vehicle-service.index');
+        } catch (\Exception $e) {
+            Alert::toast('Failed to delete vehicle service', 'error');
+
+            return redirect()->route('vehicle-service.index');
+        }
     }
 }

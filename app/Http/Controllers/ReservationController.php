@@ -26,24 +26,18 @@ class ReservationController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Reservation::with('user', 'location', 'status')->latest()->get();
+            $data = Reservation::with('user', 'location', 'status', 'vehicle')->latest()->get();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('user', function ($row) {
                     return $row->user->name;
                 })
-                // ->addColumn('vehicle', function ($row) {
-                //     return $row->vehicle->name;
-                // })
                 ->addColumn('location', function ($row) {
                     return $row->location->name;
                 })
-                // ->addColumn('driver', function ($row) {
-                //     return $row->driver->name;
-                // })
-                // ->addColumn('leader', function ($row) {
-                //     return $row->leader->name;
-                // })
+                ->addColumn('vehicle', function ($row) {
+                    return $row->vehicle->name;
+                })
                 ->addColumn('status', function ($row) {
                     return $row->status->name;
                     $badgeClass = '';
@@ -116,11 +110,8 @@ class ReservationController extends Controller
             )
         );
 
-        // return redirect()->route('reservations.index')->with('error', 'You are not allowed to create reservation');
         Alert::toast('Reservation created successfully', 'success');
         return redirect()->route('reservations.index');
-        // if (Auth::user()->role_id == Role::Admin) {
-        // }
     }
 
     /**
@@ -136,8 +127,6 @@ class ReservationController extends Controller
      */
     public function edit(Reservation $reservation)
     {
-        // dd($reservation->admin_approved == Approval::Approve->value && $reservation->leader_approved == Approval::Approve->value);
-
         if (Auth::user()->role_id !== Role::Admin->value && Auth::user()->id !== Role::Leader->value) {
             Alert::toast('You are not allowed to edit reservation', 'error');
             return redirect()->route('reservations.index');
@@ -160,7 +149,6 @@ class ReservationController extends Controller
      */
     public function update(UpdateReservationRequest $request, Reservation $reservation)
     {
-        // dd($request->validated());
         DB::beginTransaction();
 
         try {

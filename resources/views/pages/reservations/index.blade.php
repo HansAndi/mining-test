@@ -37,6 +37,7 @@
                                                 <th>No</th>
                                                 <th>Employee</th>
                                                 <th>Location</th>
+                                                <th>Vehicle</th>
                                                 <th>Start Date</th>
                                                 <th>End Date</th>
                                                 <th>Status</th>
@@ -71,6 +72,10 @@
                     {
                         data: 'location',
                         name: 'location'
+                    },
+                    {
+                        data: 'vehicle',
+                        name: 'vehicle'
                     },
                     {
                         data: 'start_date',
