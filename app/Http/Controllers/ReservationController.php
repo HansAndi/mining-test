@@ -9,12 +9,14 @@ use App\Models\Reservation;
 use App\Enums\VehicleStatus;
 use Illuminate\Http\Request;
 use App\Enums\ReservationStatus;
+use App\Exports\ReservationsExport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\StoreReservationRequest;
 use App\Http\Requests\UpdateReservationRequest;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReservationController extends Controller
 {
@@ -197,5 +199,10 @@ class ReservationController extends Controller
     public function destroy(Reservation $reservation)
     {
         //
+    }
+
+    public function export()
+    {
+        return Excel::download(new ReservationsExport, 'reservations.xlsx');
     }
 }

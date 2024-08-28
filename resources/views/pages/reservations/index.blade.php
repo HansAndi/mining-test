@@ -22,7 +22,10 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4>All Vehicles</h4>
+                                <h4>All Reservations</h4>
+                                <div class="card-header-action">
+                                    <a class="btn btn-primary" href="{{ route('reservations.export') }}">Export</a>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <div class="clearfix mb-3"></div>

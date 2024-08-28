@@ -24,6 +24,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('vehicle-service', VehicleServiceController::class);
 
     Route::resource('locations', LocationController::class);
+
+    Route::get('reservations/export', [ReservationController::class, 'export'])->name('reservations.export');
     Route::resource('reservations', ReservationController::class);
 });
 
