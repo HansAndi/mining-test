@@ -41,6 +41,7 @@
                                                 <th>Start Date</th>
                                                 <th>End Date</th>
                                                 <th>Status</th>
+                                                <th>Created At</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -88,6 +89,10 @@
                     {
                         data: 'status',
                         name: 'status'
+                    },
+                    {
+                        data: 'created_at',
+                        name: 'created_at'
                     },
                     {
                         data: 'action',

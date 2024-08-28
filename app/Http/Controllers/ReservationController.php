@@ -16,6 +16,7 @@ use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\StoreReservationRequest;
 use App\Http\Requests\UpdateReservationRequest;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ReservationController extends Controller
@@ -59,6 +60,15 @@ class ReservationController extends Controller
                         'status' => $status,
                         'badgeClass' => $badgeClass
                     ])->render();
+                })
+                ->addColumn('start_date', function ($row) {
+                    return Carbon::parse($row->start_date)->translatedFormat('d F Y');
+                })
+                ->addColumn('end_date', function ($row) {
+                    return Carbon::parse($row->end_date)->translatedFormat('d F Y');
+                })
+                ->addColumn('created_at', function ($row) {
+                    return Carbon::parse($row->created_at)->translatedFormat('d F Y');
                 })
                 ->addColumn('action', function ($row) {
                     $editUrl = route('reservations.edit', $row->id);

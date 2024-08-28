@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\Role;
 use App\Models\Location;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\DataTables\Facades\DataTables;
 use App\Http\Requests\StoreLocationRequest;
 use App\Http\Requests\UpdateLocationRequest;
-use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert as FacadesAlert;
-use Yajra\DataTables\Facades\DataTables;
-use RealRashid\SweetAlert\Facades\Alert;
 
 class LocationController extends Controller
 {
@@ -45,6 +47,11 @@ class LocationController extends Controller
      */
     public function create()
     {
+        if (Auth::user()->role_id !== Role::Admin->value) {
+            Alert::toast('You are not allowed to create location', 'error');
+            return redirect()->route('locations.index');
+        }
+
         return view('pages.locations.form');
     }
 
@@ -78,6 +85,11 @@ class LocationController extends Controller
      */
     public function edit(Location $location)
     {
+        if (Auth::user()->role_id !== Role::Admin->value) {
+            Alert::toast('You are not allowed to edit location', 'error');
+            return redirect()->route('locations.index');
+        }
+
         return view('pages.locations.form', compact('location'));
     }
 
@@ -103,6 +115,11 @@ class LocationController extends Controller
      */
     public function destroy(Location $location)
     {
+        if (Auth::user()->role_id !== Role::Admin->value) {
+            Alert::toast('You are not allowed to delete location', 'error');
+            return redirect()->route('locations.index');
+        }
+
         try {
             $location->delete();
 

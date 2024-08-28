@@ -11,10 +11,9 @@
             <li class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
                 <a href="{{ route('dashboard') }}"><i class="fas fa-fire"></i><span>Dashboard</span></a>
             </li>
-            {{-- <li class="{{ request()->routeIs('users.*') ? 'active' : '' }}">
-                <a href="{{ route('users.index') }}"
-                    ><i class="fas fa-fire"></i><span>Users</span></a>
-            </li> --}}
+
+            @if(request()->user()->role_id == \App\Enums\Role::Admin->value)
+
             <li
                 class="nav-item dropdown {{ request()->routeIs('vehicles.*') || request()->routeIs('vehicle-service.*') ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Vehicles</span></a>
@@ -38,6 +37,8 @@
                     </li>
                 </ul>
             </li>
+
+            @endif
             <li
                 class="nav-item dropdown {{ request()->routeIs('reservations.*') ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-fire"></i><span>Reservation</span></a>

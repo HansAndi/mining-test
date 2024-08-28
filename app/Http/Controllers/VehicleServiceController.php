@@ -123,6 +123,11 @@ class VehicleServiceController extends Controller
      */
     public function destroy(VehicleService $vehicleService)
     {
+        if (Auth::user()->role_id !== Role::Admin->value) {
+            Alert::toast('You are not allowed to delete vehicle service', 'error');
+            return redirect()->route('vehicle-service.index');
+        }
+
        try {
             $vehicleService->delete();
 
