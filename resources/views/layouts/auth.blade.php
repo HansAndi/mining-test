@@ -41,6 +41,7 @@
 </head>
 
 <body>
+    @include('sweetalert::alert')
     <div id="app">
         <section class="section">
             <div class="container mt-5">

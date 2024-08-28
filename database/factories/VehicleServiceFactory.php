@@ -17,7 +17,8 @@ class VehicleServiceFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'vehicle_id' => $this->faker->unique()->numberBetween(1, 40),
+            'service_date' => $this->faker->dateTimeBetween('now', '+6 month'),
         ];
     }
 }

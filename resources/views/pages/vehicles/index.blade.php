@@ -1,7 +1,4 @@
 <x-app-layout>
-
-
-
     <div class="main-content">
         <section class="section">
             <!-- Button trigger modal -->
@@ -31,7 +28,7 @@
             </div>
 
             <div class="section-header">
-                <h1>Vehicles</h1>
+                <h1>Vehicle</h1>
                 {{-- <div class="section-header-button">
                     <a href="{{ route('products.create') }}"
                         class="btn btn-primary">Add New</a>
@@ -56,50 +53,24 @@
                                 <h4>All Vehicles</h4>
                             </div>
                             <div class="card-body">
-                                {{-- <div class="float-right">
-                                    <form method="GET" action="{{ route('products.index') }}">
-                                        <div class="input-group">
-                                            <input type="text"
-                                                class="form-control"
-                                                placeholder="Search"
-                                                name="name">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-primary"><i class="fas fa-search"></i></button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div> --}}
-
                                 <div class="clearfix mb-3"></div>
 
                                 <div class="table-responsive">
-                                    <table class="table-striped table text-center">
-                                        <tr>
-                                            <th>No</th>
-                                            <th>Name</th>
-                                            <th>Type</th>
-                                            <th>Owner</th>
-                                            <th>Status</th>
-                                            <th>Last Used</th>
-                                            <th>Action</th>
-                                        </tr>
-                                        <tr>
-                                            @foreach ($vehicles as $vehicle)
-                                        <tr>
-                                            <td>{{ $loop->iteration }}</td>
-                                            <td>{{ $vehicle->name }}</td>
-                                            <td>{{ $vehicle->type }}</td>
-                                            <td>{{ $vehicle->ownership }}</td>
-                                            <td>{{ $vehicle->status->name }}</td>
-                                            <td>{{ $vehicle->last_used_at }}</td>
-                                        </tr>
-                                        @endforeach
-                                        </tr>
+                                    <table id="table" class="table-striped table">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Name</th>
+                                                <th>Type</th>
+                                                <th>Owner</th>
+                                                <th>Status</th>
+                                                <th>Last Used</th>
+                                                {{-- <th>Action</th> --}}
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
                                     </table>
                                 </div>
-                                {{-- <div class="float-right">
-                                    {{ $products->links() }}
-                                </div> --}}
                             </div>
                         </div>
                     </div>
@@ -107,4 +78,24 @@
             </div>
         </section>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            var table = $('#table').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: '{{ route('vehicles.index') }}',
+                columns: [
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex' },
+                    { data: 'name', name: 'name' },
+                    { data: 'type', name: 'type' },
+                    { data: 'ownership', name: 'ownership' },
+                    { data: 'status', name: 'status', searchable: true },
+                    { data: 'last_used_at', name: 'last_used_at' },
+                    // { data: 'action', name: 'action' }
+                ]
+            });
+        });
+    </script>
 </x-app-layout>
+

@@ -5,16 +5,14 @@ namespace App\Enums;
 enum Role: int
 {
     case Admin = 1;
-    case Pool = 2;
-    case Leader = 3;
-    case Driver = 4;
-    case Employee = 5;
+    case Leader = 2;
+    case Driver = 3;
+    case Employee = 4;
 
     public function getRole(): string
     {
         return match ($this) {
-            self::Admin => 'Pending',
-            self::Pool => 'On Loan',
+            self::Admin => 'Admin',
             self::Leader => 'Leader',
             self::Driver => 'Driver',
             self::Employee => 'Employee',
@@ -25,7 +23,6 @@ enum Role: int
     {
         return [
             ['value' => self::Admin, 'status' => self::Admin->getRole()],
-            ['value' => self::Pool, 'status' => self::Pool->getRole()],
             ['value' => self::Leader, 'status' => self::Leader->getRole()],
             ['value' => self::Driver, 'status' => self::Driver->getRole()],
             ['value' => self::Employee, 'status' => self::Employee->getRole()],

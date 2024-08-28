@@ -11,7 +11,7 @@ class StoreVehicleServiceRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,8 @@ class StoreVehicleServiceRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'vehicle_id' => ['required', 'integer', 'exists:vehicles,id'],
+            'service_date' => ['required', 'date'],
         ];
     }
 }

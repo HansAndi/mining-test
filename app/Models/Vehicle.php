@@ -14,6 +14,13 @@ class Vehicle extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+    // protected $fillable = [
+    //     'name',
+    //     'type',
+    //     'ownership',
+    //     'status_id',
+    //     'last_used_at'
+    // ];
 
     public function reservations()
     {

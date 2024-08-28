@@ -11,7 +11,7 @@ class StoreVehicleRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,11 @@ class StoreVehicleRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:255'],
+            'type' => ['required', 'string', 'in:Person,Cargo'],
+            'ownership' => ['required', 'string', 'in:Company,Rental'],
+            'status_id' => ['required', 'integer', 'exists:vehicle_statuses,id'],
+            'last_used_at' => ['nullable', 'date'],
         ];
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\VehicleService;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -12,6 +13,8 @@ class VehicleServiceSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        VehicleService::factory()
+            ->count(10)
+            ->create();
     }
 }
